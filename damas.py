@@ -75,7 +75,7 @@ def printboard(board: list[list[int]]) -> None:
 
 
 # n=int(input("The no. of queens"))
-n = 10
+n = 4
 board = [[0 for i in range(n)] for j in range(n)]
 solve(board, 0)
 print("El total de soluciones son :", len(solution))
