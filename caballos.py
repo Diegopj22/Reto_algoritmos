@@ -91,9 +91,10 @@ if __name__ == "__main__":
     import doctest
 
     doctest.testmod()
-    print
-
+    
     print(open_knight_tour(6))
+
+
 
 
 
