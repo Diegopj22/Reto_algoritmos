@@ -93,6 +93,8 @@ if __name__ == "__main__":
     doctest.testmod()
     
     print(open_knight_tour(5))
+    
+    
 
 
 
