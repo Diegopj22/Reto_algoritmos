@@ -1,65 +1,96 @@
-# Board matrix size
-N = 8
-TARGETMOVES = N**2
-
-def printBoard(board):
-	'''
-		Prints Board
-	'''
-	for i in range(len(board)):
-		print(board[i])
-
-def checkValid(board, movx, movy):
-	'''
-		params:
-		movx => next x move
-		movy => next y move
-		
-		checks if move is valid
-	'''
-	if (movx >= 0 and movy >= 0 and movx < N and movy < N and board[movx][movy] == -1):
-		return True
-	return False
-
-def generateMove(board, currx, curry, totalmoves, xmoves, ymoves):
-	if totalmoves == TARGETMOVES:
-		return True
-
-	print("X: {} <> Y: {}".format(currx, curry))
+from __future__ import annotations
 
 
-	for i in range(8):
+def get_valid_pos(position: tuple[int, int], n: int) -> list[tuple[int, int]]:
+    """
+    Find all the valid positions a knight can move to from the current position.
+    >>> get_valid_pos((1, 3), 4)
+    [(2, 1), (0, 1), (3, 2)]
+    """
 
-		nextx = currx + xmoves[i]
-		nexty = curry + ymoves[i]
+    y, x = position
+    positions = [
+        (y + 1, x + 2),
+        (y - 1, x + 2),
+        (y + 1, x - 2),
+        (y - 1, x - 2),
+        (y + 2, x + 1),
+        (y + 2, x - 1),
+        (y - 2, x + 1),
+        (y - 2, x - 1),
+    ]
+    permissible_positions = []
 
-		if checkValid(board, nextx, nexty):
-			board[nextx][nexty] = totalmoves
+    for position in positions:
+        y_test, x_test = position
+        if 0 <= y_test < n and 0 <= x_test < n:
+            permissible_positions.append(position)
 
-			if generateMove(board, nextx, nexty, totalmoves+1, xmoves, ymoves):
-				return True
-			board[nextx][nexty] = -1
+    return permissible_positions
 
-	return False
+
+def is_complete(board: list[list[int]]) -> bool:
+    """
+    Check if the board (matrix) has been completely filled with non-zero values.
+    >>> is_complete([[1]])
+    True
+    >>> is_complete([[1, 2], [3, 0]])
+    False
+    """
+
+    return not any(elem == 0 for row in board for elem in row)
+
+
+def open_knight_tour_helper(
+    board: list[list[int]], pos: tuple[int, int], curr: int
+) -> bool:
+    """
+    Helper function to solve knight tour problem.
+    """
+
+    if is_complete(board):
+        return True
+
+    for position in get_valid_pos(pos, len(board)):
+        y, x = position
+
+        if board[y][x] == 0:
+            board[y][x] = curr + 1
+            if open_knight_tour_helper(board, position, curr + 1):
+                return True
+            board[y][x] = 0
+
+    return False
+
+
+def open_knight_tour(n: int) -> list[list[int]]:
+    """
+    Find the solution for the knight tour problem for a board of size n. Raises
+    ValueError if the tour cannot be performed for the given size.
+    >>> open_knight_tour(1)
+    [[1]]
+    >>> open_knight_tour(2)
+    Traceback (most recent call last):
+        ...
+    ValueError: Open Kight Tour cannot be performed on a board of size 2
+    """
+
+    board = [[0 for i in range(n)] for j in range(n)]
+
+    for i in range(n):
+        for j in range(n):
+            board[i][j] = 1
+            if open_knight_tour_helper(board, (i, j), 1):
+                return board
+            board[i][j] = 0
+
+    raise ValueError(f"Open Kight Tour cannot be performed on a board of size {n}")
+
 
 if __name__ == "__main__":
-	currx = 0
-	curry = 0
+    import doctest
 
-	# Init board
-	board = [[-1 for i in range(N)] for i in range(N)]
-
-	xmoves = [-2, -2, -1, -1, 1, 1, 2, 2]
-	ymoves = [1, -1, 2, -2, 2, -2, 1, -1]
-
-	totalmoves = 1
-
-	board[0][0] = 0
-
-	if generateMove(board, currx, curry, totalmoves, xmoves, ymoves):
-		printBoard(board)
-else:print("No solution")
-
+    doctest.testmod()
 
     
 
