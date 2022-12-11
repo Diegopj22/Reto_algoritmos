@@ -3,7 +3,7 @@ from __future__ import annotations
 
 def get_valid_pos(position: tuple[int, int], n: int) -> list[tuple[int, int]]:
     """
-    Find all the valid positions a knight can move to from the current position.
+    Encuentre todas las posiciones válidas a las que puede moverse un caballo desde la posición actual.
     >>> get_valid_pos((1, 3), 4)
     [(2, 1), (0, 1), (3, 2)]
     """
@@ -31,7 +31,7 @@ def get_valid_pos(position: tuple[int, int], n: int) -> list[tuple[int, int]]:
 
 def is_complete(board: list[list[int]]) -> bool:
     """
-    Check if the board (matrix) has been completely filled with non-zero values.
+    Compruebe si el tablero(matriz)se ha llenado completamente con valores distintos de cero.
     >>> is_complete([[1]])
     True
     >>> is_complete([[1, 2], [3, 0]])
@@ -45,7 +45,7 @@ def open_knight_tour_helper(
     board: list[list[int]], pos: tuple[int, int], curr: int
 ) -> bool:
     """
-    Helper function to solve knight tour problem.
+    Funcióon que ayuda para resolver el problemadel recorrido del caballo.
     """
 
     if is_complete(board):
@@ -65,8 +65,8 @@ def open_knight_tour_helper(
 
 def open_knight_tour(n: int) -> list[list[int]]:
     """
-    Find the solution for the knight tour problem for a board of size n. Raises
-    ValueError if the tour cannot be performed for the given size.
+    Encuentre la solución para el problema del recorrido del caballo para un tablero de tamaño n.
+    Aumenta ValueError si no se puede encontrar una solución.
     >>> open_knight_tour(1)
     [[1]]
     >>> open_knight_tour(2)
@@ -92,7 +92,13 @@ if __name__ == "__main__":
 
     doctest.testmod()
     
-    print(open_knight_tour(6))
+    print(open_knight_tour(5))
+    
+
+
+
+
+
 
 
 
